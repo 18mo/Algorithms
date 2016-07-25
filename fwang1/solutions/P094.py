@@ -11,21 +11,19 @@ class Solution(object):
         :type root: TreeNode
         :rtype: List[int]
         """
-        if not root: return []
-        stack = [root]
+        cur = root
+        stack = []
         result = []
-        while stack:
-            cur = stack[-1]
-            
-            if cur.left and not cur.left in set(result):
-            	cur = cur.left
-            	stack.append(cur)
-            else:
-            	result.append(stack.pop())
-            	if cur.right:
-            		stack.append(cur.right)
 
-        return map(lambda x: x.val, result)
+        # niubi! - rewrote it from Steven's code.
+        while cur or stack:
+            while cur:
+                stack.append(cur)
+                cur = cur.left
+            cur = stack.pop()
+            result.append(cur.val)
+            cur = cur.right
+        return result
 
 def test1():
 	t0 = TreeNode(0)
@@ -58,7 +56,7 @@ def test2():
 	t1.left = t2
 	t1.right = t3
 	t3.right = t4
-	
+
 
 	expected = [2, 1, 3, 4, 0, 5]
 	actual = Solution().inorderTraversal(t0)
@@ -68,17 +66,15 @@ def test3():
 	t1 = TreeNode(1)
 	t2 = TreeNode(2)
 	t3 = TreeNode(3)
-	
+
 	t1.right = t2
 	t2.left = t3
 
 	expected = [1,3,2]
 	actual = Solution().inorderTraversal(t1)
 	print "PASSED" if (expected == actual) else "FAILED"
-        
-if __name__ == "__main__":	
+
+if __name__ == "__main__":
 	test1()
 	test2()
 	test3()
-    
-        
